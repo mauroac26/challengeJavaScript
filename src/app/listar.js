@@ -15,7 +15,7 @@ class Listar extends Component {
   }
 
   obtenerPresupuesto(){
-    fetch('/api/listar')
+    fetch('/api/presupuesto')
       .then(res => res.json())
       .then(data => {
           this.setState({listar: data});
@@ -25,21 +25,23 @@ class Listar extends Component {
   }
 
   eliminar(id){
-      if (confirm('Estas seguro de querer eliminar esto?'))
-      fetch(`/api/presupuesto/${id}`,{
-        method: 'DELETE',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data);
-        this.obtenerPresupuesto();
-    });
-      
-  }
+    if (confirm('Estas seguro de querer eliminar esto?'))
+    fetch(`/api/presupuesto/${id}`,{
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+  })
+  .then(res => res.json())
+  .then(data => {
+      console.log(data);
+      this.obtenerPresupuesto();
+  });
+    
+}
+
+
     render() {
         return (
             <div>
@@ -76,7 +78,7 @@ class Listar extends Component {
           <td>{presupuesto.fecha}</td>
           <td>{presupuesto.tipo}</td>
           <td>
-              <button class="btn btn-primary btn-sm">
+              <button class="btn btn-primary btn-sm" onClick={() => this.editar(presupuesto.id)}>
               Editar
               </button>
               <button class="btn btn-primary btn-sm m-1" onClick={() => this.eliminar(presupuesto.id)}>
