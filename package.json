@@ -20,10 +20,14 @@
   },
   "homepage": "https://github.com/mauroac26/challengeJavaScript#readme",
   "dependencies": {
+    "bootstrap-icons": "^1.5.0",
     "express": "^4.17.1",
     "mongoose": "^6.0.7",
     "mongoose-float": "^1.0.4",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.6.5"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
