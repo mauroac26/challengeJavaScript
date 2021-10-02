@@ -13,6 +13,7 @@
 
 //const { Sequelize, DataTypes } = require('sequelize');
 const db = require("../database/database");
+const { DataTypes } = require("sequelize");
 sequelize = db.sequelize,
 Sequelize = db.Sequelize;
 
@@ -26,7 +27,7 @@ concepto: {
     type: Sequelize.TEXT
 },
 monto: {
-    type: Sequelize.DECIMAL
+    type: DataTypes.DECIMAL(10, 2)
 },
 fecha: {
     type: Sequelize.DATE

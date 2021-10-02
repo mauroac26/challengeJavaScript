@@ -5,14 +5,11 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-      concepto: '',
-      monto: '',
-      fecha: '',
-      tipo: '',
-      presupuestos: []
+      presupuestos: [],
+      arr: [],
+      total: 0
     };
     this.handleChange = this.handleChange.bind(this);
-    this.agregarPresupuesto = this.agregarPresupuesto.bind(this);
   }
 
   componentDidMount(){
@@ -20,56 +17,44 @@ class App extends Component {
   }
 
   obtenerPresupuesto(){
-    fetch('/api/presupuesto')
+    fetch('/api/listar')
       .then(res => res.json())
       .then(data => {
-          this.setState({presupuestos: data});
-          console.log(this.state.presupuestos);
-    
-    });
-  }
+        this.setState({presupuestos: data});
+          // if(data.length <= 10){
+          //   this.setState({presupuestos: data});
+          // }else{
+          // let i = data.length - 10;
+          // data.splice(0, i);
+          // this.setState({presupuestos: data});
+          
+          //   }  
+        data.map(presupuesto => {
+        
 
-  eliminar(id){
-    if (confirm('Estas seguro de querer eliminar esto?'))
-    fetch(`/api/presupuesto/${id}`,{
-      method: 'DELETE',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-  })
-  .then(res => res.json())
-  .then(data => {
-      console.log(data);
-      this.obtenerPresupuesto();
-  });
-    
-}
-
-  agregarPresupuesto(e){
-    fetch('/api/presupuesto',{
-      method: 'POST',
-      body: JSON.stringify(this.state),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        this.setState({
-          concepto: '',
-          monto: '',
-          fecha: '',
-          tipo: ''
-        });
-        this.obtenerPresupuesto();
+          if(presupuesto.tipo == "ingreso"){
+            this.state.total = this.state.total + parseFloat(presupuesto.monto)
+          }else{
+            this.state.total = this.state.total - parseFloat(presupuesto.monto)
+          }
+           
+          
+       })
+       
+       
+      const moneda = new Intl.NumberFormat('es-AR', {
+        style: 'currency',
+        currency: 'ARS',
+        minimumFractionDigits: 0
       })
-      .catch(res => console.log(err));
+    
 
-    e.preventDefault();
+      this.setState({
+        total: moneda.format(this.state.total)
+      });
+          });
   }
+
   
 
   handleChange(e) {
@@ -84,57 +69,39 @@ class App extends Component {
           
             <div>
                 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-                  <div class="container-fluid justify-content-center">
-                  <a class="navbar-brand text-white " href="/">Presupuesto Personal</a>
+                <div class="container-fluid">
+                <a href="#" class="navbar-brand">Presupuesto Personal</a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                  
+                  <div class="navbar-nav">
+                  <a class="nav-item nav-link active text-white" href="/">Home</a>
+                  
+                  <a class="nav-item nav-link text-white" href="/listar.html">Listar</a>
                   </div>
-                  <div>
-                  <a class="navbar-brand text-white " href="/listar.html">Listar</a>
                   </div>
+                </div>
                 </nav>
                 
                 <div class="row justify-content-center">
-                <div class="col-4">
+
+<div class="col-6 mt-2">
+
+<div class="row text-center">
+  
+  <h5 >Balance Actual: {this.state.total}</h5>
+  
+</div> 
+
                 <div class="card mt-2">
-  <div class="card-header">
-    Registro de operacion
+<div class="card-header text-center">
+    Listado ultimos 10 movimientos
   </div>
   <div class="card-body">
-  <form onSubmit={this.agregarPresupuesto}>
-  <div class="form-group">
-    <label for="concepto">Concepto:</label>
-    <textarea name="concepto" onChange={this.handleChange} class="form-control" id="concepto" rows="2" value={this.state.concepto}></textarea>
-  </div>
-  <div class="form-group">
-    <label for="monto">Monto:</label>
-    <input name="monto" onChange={this.handleChange} type="text" class="form-control" id="pwd" value={this.state.monto}/>
-  </div>
-  <div class="form-group">
-    <label for="fecha">Fecha:</label>
-    <input name="fecha" onChange={this.handleChange} selected={this.state.fecha} type="date" class="form-control" id="pwd" value={this.state.fecha}/>
-  </div>
-  <div class="form-group">
-    <label for="tipo">Tipo:</label>
-    <select name="tipo"  onChange={this.handleChange} class="form-select" aria-label="Default select example" value={this.state.tipo}>
-    <option value="" selected>---</option>
-  <option value="ingreso">Ingreso</option>
-  <option value="egreso">Egreso</option>
-</select>
-  </div>
-  <button type="submit" class="btn btn-primary mt-2">Enviar</button>
-</form>
-
-  </div>
- 
-</div>
-</div>
-
-<div class="col-6">
-                <div class="card mt-2">
-<div class="card-header">
-    Listado operaciones
-  </div>
-  <div class="card-body">
- 
+     
+  <div class="table-responsive">
   <table class="table table-striped table-hover">
         <thead>
             <tr>
@@ -146,27 +113,23 @@ class App extends Component {
         </thead>
         <tbody>
         {
-      this.state.presupuestos.map(presupuesto => {
-          return (
-        <tr key={presupuesto._id}>
-          <td>{presupuesto.concepto}</td>
-          <td>{presupuesto.monto}</td>
-          <td>{presupuesto.fecha}</td>
-          <td>{presupuesto.tipo}</td>
-          <td>
-              <button class="btn btn-primary btn-sm" onClick={() => this.editar(presupuesto.id)}>
-              Editar
-              </button>
-              <button class="btn btn-primary btn-sm m-1" onClick={() => this.eliminar(presupuesto.id)}>
-                  Eliminar
-              </button>
-          </td>
-          </tr>
-          )
-      })
-  }
+        this.state.presupuestos.map(presupuesto => {
+  
+            return (
+          <tr>
+            <td>{presupuesto.concepto}</td>
+            <td>${presupuesto.monto}</td>
+            <td>{presupuesto.fecha}</td>
+            <td>{presupuesto.tipo}</td>
+          
+            </tr>
+            )
+          
+        })
+    }
         </tbody>
 </table>
+</div>
   </div>
 
 </div>

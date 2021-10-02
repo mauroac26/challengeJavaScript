@@ -126,18 +126,26 @@ class Listar extends Component {
             
               <div>
                   <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-                    <div class="container-fluid justify-content-center">
-                    <a class="navbar-brand text-white " href="/">Presupuesto Personal</a>
-                    </div>
-                    <div>
-                    <a class="navbar-brand text-white " href="/listar.html">Listar</a>
-                    </div>
-                  </nav>
+                <div class="container-fluid">
+                <a href="#" class="navbar-brand">Presupuesto Personal</a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                  
+                  <div class="navbar-nav">
+                  <a class="nav-item nav-link active text-white" href="/">Home</a>
+                  
+                  <a class="nav-item nav-link text-white" href="/listar.html">Listar</a>
+                  </div>
+                  </div>
+                </div>
+                </nav>
                   
                   <div class="row justify-content-center">
                   <div class="col-4">
                   <div class="card mt-2">
-    <div class="card-header">
+    <div class="card-header text-center">
       Registro de operacion
     </div>
     <div class="card-body">
@@ -172,11 +180,11 @@ class Listar extends Component {
   
   <div class="col-6">
                   <div class="card mt-2">
-  <div class="card-header">
+  <div class="card-header text-center">
       Listado operaciones
     </div>
     <div class="card-body">
-   
+    <div class="table-responsive">
     <table class="table table-striped table-hover">
           <thead>
               <tr>
@@ -209,6 +217,7 @@ class Listar extends Component {
     }
           </tbody>
   </table>
+  </div>
     </div>
   
   </div>
