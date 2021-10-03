@@ -1,7 +1,7 @@
 module.exports = {
     entry: {
         index: './src/app/index.js',
-        listar: './src/app/listar.js',
+        listar: './src/app/list.js',
       },
     output: {
         path: __dirname + '/src/public',

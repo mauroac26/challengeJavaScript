@@ -1,41 +1,34 @@
 import React, { Component } from "react";
+import Header from './header'; 
 
 class App extends Component {
 
   constructor(){
     super();
     this.state = {
-      presupuestos: [],
-      arr: [],
+      budgets: [],
       total: 0
     };
     this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount(){
-    this.obtenerPresupuesto();
+    this.getBudget();
   }
 
-  obtenerPresupuesto(){
-    fetch('/api/listar')
+  getBudget(){
+    fetch('/api/list')
       .then(res => res.json())
       .then(data => {
-        this.setState({presupuestos: data});
-          // if(data.length <= 10){
-          //   this.setState({presupuestos: data});
-          // }else{
-          // let i = data.length - 10;
-          // data.splice(0, i);
-          // this.setState({presupuestos: data});
-          
-          //   }  
-        data.map(presupuesto => {
+        this.setState({budgets: data});
+        
+        data.map(budget => {
         
 
-          if(presupuesto.tipo == "ingreso"){
-            this.state.total = this.state.total + parseFloat(presupuesto.monto)
+          if(budget.tipo == "Ingreso"){
+            this.state.total = this.state.total + parseFloat(budget.amount)
           }else{
-            this.state.total = this.state.total - parseFloat(presupuesto.monto)
+            this.state.total = this.state.total - parseFloat(budget.amount)
           }
            
           
@@ -68,26 +61,11 @@ class App extends Component {
         return (
           
             <div>
-                <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-                <div class="container-fluid">
-                <a href="#" class="navbar-brand">Presupuesto Personal</a>
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                  
-                  <div class="navbar-nav">
-                  <a class="nav-item nav-link active text-white" href="/">Home</a>
-                  
-                  <a class="nav-item nav-link text-white" href="/listar.html">Listar</a>
-                  </div>
-                  </div>
-                </div>
-                </nav>
+            <Header></Header>
                 
                 <div class="row justify-content-center">
 
-<div class="col-6 mt-2">
+<div class="col-md-6 mt-2">
 
 <div class="row text-center">
   
@@ -95,7 +73,7 @@ class App extends Component {
   
 </div> 
 
-                <div class="card mt-2">
+                <div class="card mt-2 border-primary">
 <div class="card-header text-center">
     Listado ultimos 10 movimientos
   </div>
@@ -113,14 +91,14 @@ class App extends Component {
         </thead>
         <tbody>
         {
-        this.state.presupuestos.map(presupuesto => {
+        this.state.budgets.map(budget => {
   
             return (
           <tr>
-            <td>{presupuesto.concepto}</td>
-            <td>${presupuesto.monto}</td>
-            <td>{presupuesto.fecha}</td>
-            <td>{presupuesto.tipo}</td>
+            <td>{budget.concept}</td>
+            <td>${budget.amount}</td>
+            <td>{budget.date}</td>
+            <td>{budget.type}</td>
           
             </tr>
             )

@@ -14,8 +14,8 @@ app.use(morgan('dev'));
 app.use(express.json())
 
 //Routes
-app.use('/api/presupuesto', require('./routes/presupuesto.routes'))
-app.use('/api/listar', require('./routes/listar.routes'))
+app.use('/api/budget', require('./routes/budget.routes'))
+app.use('/api/list', require('./routes/list.routes'))
 
 //Static files
 app.use(express.static(path.join(__dirname, 'public')))
